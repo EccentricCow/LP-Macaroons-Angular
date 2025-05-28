@@ -1,0 +1,15 @@
+<div class="products__item">
+  <img class="products__item-img" src="assets/images/products/product{{ this.imageNumber }}.png"
+       alt="Макарун {{ this.index + 1 }}">
+  <div class="products__item-title">{{ this.title }}</div>
+  <div class="products__item-extra">
+    <div class="products__item-quantity">1 шт.</div>
+    <div class="products__item-price">{{ this.price }} руб.</div>
+    <div class="products__action">
+      <a class="btn btn_size_tiny btn_link btn_link_xs" href="javascript: void(0)" appBtnBackground
+         (click)="addProductToCart()">
+        Заказать
+      </a>
+    </div>
+  </div>
+</div>
