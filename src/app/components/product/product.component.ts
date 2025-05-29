@@ -10,7 +10,7 @@ export class ProductComponent {
   @Input() imageNumber: number = 0;
   @Input() index: number = 0;
   @Input() title: string = '';
-  @Input() price: string = '';
+  @Input() price: number = 0;
 
   @Output() addToCartEvent: EventEmitter<null> = new EventEmitter<null>;
 

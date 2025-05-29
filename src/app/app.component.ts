@@ -47,9 +47,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = this.productService.getProducts();
+
   }
 
-  public scrollTo(target: HTMLElement): void {
+  protected scrollTo(target: HTMLElement): void {
     target.scrollIntoView({behavior: 'smooth'});
   }
 
@@ -59,4 +60,7 @@ export class AppComponent implements OnInit {
     this.cartService.addProductToCart(parseFloat(product.price.replace(',', '.')));
     alert(product.title + ' добавлен в корзину!');
   };
+
+  protected readonly parseFloat = parseFloat;
+  protected readonly Number = Number;
 }

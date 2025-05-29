@@ -84,7 +84,8 @@
     <h2 class="second-title second-title_color_white" id="products">Выберите свой макарун</h2>
     <div class="products__grid">
       <product-component *ngFor="let product of products; let i = index"
-                         [imageNumber]="i + 1" [index]="i" [title]="product.title" [price]="product.price"
+                         [imageNumber]="i + 1" [index]="i" [title]="product.title"
+                         [price]="parseFloat(product.price.replace(',', '.'))"
                          (addToCartEvent)="addToCart(product, order)"
       ></product-component>
     </div>
@@ -147,8 +148,7 @@
   <div class="present__image">
     <div class="present__inner">
       <div class="present__footnote">
-        <div class="present__text">{{ cartService.totalCost | priceOutput }} руб.</div>
-
+        <div class="present__text">{{ cartService.totalCost | currency: "руб." }}</div>
       </div>
     </div>
     <a href="#order">
