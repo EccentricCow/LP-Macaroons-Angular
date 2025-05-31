@@ -1,13 +1,15 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AdvantageType} from "./types/advantage.type";
 import {ProductType} from "./types/product.type";
+import {ProductService} from "./services/product.service";
+import {CartService} from "./services/cart.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   protected advantages: AdvantageType[] = [
     {
       title: 'Лучшие продукты',
@@ -26,29 +28,7 @@ export class AppComponent {
       description: 'Вкус, качество и безопасность наших пирогов подтверждена декларацией о соответствии, которую мы получили 22.06.2016 г.',
     },
   ];
-
-  protected products: ProductType[] = [
-    {
-      image: 'product1.png',
-      title: 'Макарун с малиной',
-      price: '1,70',
-    },
-    {
-      image: 'product2.png',
-      title: 'Макарун с манго',
-      price: '1,70',
-    },
-    {
-      image: 'product3.png',
-      title: 'Пирог с ванилью',
-      price: '1,70',
-    },
-    {
-      image: 'product4.png',
-      title: 'Пирог с фисташками',
-      price: '1,70',
-    },
-  ];
+  protected products: ProductType[] = [];
 
   protected orderInfo = {
     productTitle: '',
@@ -57,15 +37,30 @@ export class AppComponent {
   };
 
   protected showPresent: boolean = true;
-  protected contactPhone: string = '+375 (29) 368-98-68';
+  protected contactPhone: string = '375293689868';
   protected instagramLink: string = 'https://google.com';
 
-  public scrollTo(target: HTMLElement): void {
+  constructor(private productService: ProductService,
+              protected cartService: CartService
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.products = this.productService.getProducts();
+
+  }
+
+  protected scrollTo(target: HTMLElement): void {
     target.scrollIntoView({behavior: 'smooth'});
   }
 
-  protected addToCart(productTitle: string, target: HTMLElement): void {
+  protected addToCart(product: ProductType, target: HTMLElement): void {
     this.scrollTo(target);
-    this.orderInfo.productTitle = productTitle.toUpperCase();
+    this.orderInfo.productTitle = product.title.toUpperCase();
+    this.cartService.addProductToCart(parseFloat(product.price.replace(',', '.')));
+    alert(product.title + ' добавлен в корзину!');
   };
+
+  protected readonly parseFloat = parseFloat;
+  protected readonly Number = Number;
 }

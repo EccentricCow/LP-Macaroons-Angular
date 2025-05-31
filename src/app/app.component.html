@@ -34,7 +34,7 @@
                 </svg>
       </div>
     </nav>
-    <div class="contacts header__contacts">{{ contactPhone }}</div>
+    <div class="contacts header__contacts">{{ contactPhone | customPhone }}</div>
   </div>
 </header>
 
@@ -45,7 +45,9 @@
       Побалуйте себя и своих близких самыми вкусными и ароматными домашними пироженками Macaroon!
     </div>
     <div class="main__action">
-      <a class="btn btn_size_medium btn_link btn_link_big" href="javascript: void(0)" (click)="scrollTo(menu)">
+      <a class="btn btn_size_medium btn_link btn_link_big" href="javascript: void(0)" (click)="scrollTo(menu)"
+         appBtnBackground [appBtnBackgroundDefault]="'rgb(130, 19, 40)'"
+         [appBtnBackgroundHover]="'rgba(130, 19, 40, 0.8)'">
         Выбрать макарун
       </a>
     </div>
@@ -70,13 +72,9 @@
       <img class="company__image-img" src="assets/images/company-image.png" alt="Макаруна">
     </div>
     <div class="company__advantages">
-      <div class="company__advantage" *ngFor="let advantage of advantages; let i = index">
-        <div class="number">
-          <span class="number__span">{{ i + 1 }}</span>
-        </div>
-        <div class="company__advantage-title">{{ advantage.title }}</div>
-        <div class="company__advantage-text">{{ advantage.description }}</div>
-      </div>
+      <advantages-component *ngFor="let advantage of advantages; let i = index"
+                            [title]="advantage.title" [description]="advantage.description" [number]="i + 1"
+      ></advantages-component>
     </div>
   </div>
 </section>
@@ -85,20 +83,11 @@
   <div class="container">
     <h2 class="second-title second-title_color_white" id="products">Выберите свой макарун</h2>
     <div class="products__grid">
-      <div class="products__item" *ngFor="let product of products; let i = index">
-        <img class="products__item-img" src="assets/images/products/{{ product.image }}" alt="Макарун {{ i + 1 }}">
-        <div class="products__item-title">{{ product.title }}</div>
-        <div class="products__item-extra">
-          <div class="products__item-quantity">1 шт.</div>
-          <div class="products__item-price">{{ product.price }} руб.</div>
-          <div class="products__action">
-            <a class="btn btn_size_tiny btn_link btn_link_xs" href="javascript: void(0)"
-               (click)="addToCart(product.title, order)">
-              Заказать
-            </a>
-          </div>
-        </div>
-      </div>
+      <product-component *ngFor="let product of products; let i = index"
+                         [imageNumber]="i + 1" [index]="i" [title]="product.title"
+                         [price]="parseFloat(product.price.replace(',', '.'))"
+                         (addToCartEvent)="addToCart(product, order)"
+      ></product-component>
     </div>
   </div>
 </section>
@@ -127,12 +116,12 @@
                  [(ngModel)]="orderInfo.name">
         </label>
         <label>
-          <input class="order__input" type="tel" name="client-phone" placeholder="+375 (__) ___ - __ - __"
+          <input class="order__input" type="tel" name="client-phone" placeholder="+375 (__) ___-__-__"
                  [(ngModel)]="orderInfo.phone">
         </label>
 
         <div class="order__action">
-          <a class="btn btn_size_big btn_link btn_link_big order__btn" href="javascript: void(0)">
+          <a class="btn btn_size_big btn_link btn_link_big order__btn" href="javascript: void(0)" appBtnBackground>
             Оформить заказ
           </a>
         </div>
@@ -151,7 +140,7 @@
       <img class="footer__icon" src="assets/images/instagram-logo.png" alt="Логотип Instagram">
       <span class="footer__text">Мы в Instagram</span>
     </a>
-    <div class="contacts footer__contacts">{{ contactPhone }}</div>
+    <div class="contacts footer__contacts">{{ contactPhone | customPhone }}</div>
   </div>
 </footer>
 
@@ -159,12 +148,12 @@
   <div class="present__image">
     <div class="present__inner">
       <div class="present__footnote">
-        <div class="present__text">Оформите заказ</div>
-        <div class="present__text">и получите подарок!</div>
+        <div class="present__text">{{ cartService.totalCost | currency: "руб." }}</div>
       </div>
     </div>
     <a href="#order">
-      <img src="assets/images/present.png" alt="Подарок">
+      <img class="present__cart" src="assets/images/cart.png" alt="Cart">
     </a>
+    <div class="present__cart-count">{{ cartService.totalQuantity }}</div>
   </div>
 </div>
